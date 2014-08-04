@@ -11,9 +11,6 @@
 @interface MasterViewController : NSViewController
 
 @property (nonatomic,strong) IBOutlet NSTextField *hexField;
-@property (nonatomic,strong) IBOutlet NSTextField *rField;
-@property (nonatomic,strong) IBOutlet NSTextField *gField;
-@property (nonatomic,strong) IBOutlet NSTextField *bField;
 
 - (IBAction)toRGB:(id)sender;
 - (IBAction)toHex:(id)sender;
@@ -22,8 +19,16 @@
 @property (nonatomic,strong) IBOutlet NSColorWell *colorWell;
 @property (nonatomic,strong) IBOutlet NSTextField *codeLabel;
 
-@property (nonatomic,strong) IBOutlet NSTextField *rPersentField;
-@property (nonatomic,strong) IBOutlet NSTextField *gPersentField;
-@property (nonatomic,strong) IBOutlet NSTextField *bPersentField;
+
+@property (nonatomic,strong) IBOutlet NSForm *rgbForm;
+@property (nonatomic,strong) IBOutlet NSForm *rgbPersentForm;
+
+@property (nonatomic,strong) NSString *r;
+@property (nonatomic,strong) NSString *g;
+@property (nonatomic,strong) NSString *b;
+
+@property (nonatomic,strong) NSString *rPercent;
+@property (nonatomic,strong) NSString *gPercent;
+@property (nonatomic,strong) NSString *bPercent;
 
 @end

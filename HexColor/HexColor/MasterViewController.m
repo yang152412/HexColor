@@ -7,6 +7,7 @@
 //
 
 #import "MasterViewController.h"
+#import <objc/runtime.h>
 
 @interface MasterViewController ()
 
@@ -23,14 +24,83 @@
     return self;
 }
 
+- (void)loadView
+{
+    [super loadView];
+    NSFormCell *rCell = [self.rgbForm cellAtIndex:0];
+    self.r = rCell.stringValue;
+}
+#pragma mark - setter/getter
+- (NSString *)r
+{
+    return [[self.rgbForm cellAtIndex:0] stringValue];
+}
+- (void)setR:(NSString *)r
+{
+    [[self.rgbForm cellAtIndex:0] setStringValue:r];
+}
+
+- (NSString *)g
+{
+    return [[self.rgbForm cellAtIndex:1] stringValue];
+}
+
+- (void)setG:(NSString *)g
+{
+    [[self.rgbForm cellAtIndex:1] setStringValue:g];
+}
+
+
+- (NSString *)b
+{
+    return [[self.rgbForm cellAtIndex:2] stringValue];
+}
+
+- (void)setB:(NSString *)b
+{
+    [[self.rgbForm cellAtIndex:2] setStringValue:b];
+}
+
+
+- (NSString *)rPercent
+{
+    return [[self.rgbPersentForm cellAtIndex:0] stringValue];
+}
+- (void)setRPercent:(NSString *)rPercent
+{
+    [[self.rgbPersentForm cellAtIndex:0] setStringValue:rPercent];
+}
+
+
+- (NSString *)gPercent
+{
+    return [[self.rgbPersentForm cellAtIndex:1] stringValue];
+}
+- (void)setGPercent:(NSString *)gPercent
+{
+    [[self.rgbPersentForm cellAtIndex:1] setStringValue:gPercent];
+}
+
+
+- (NSString *)bPercent
+{
+    return [[self.rgbPersentForm cellAtIndex:2] stringValue];
+}
+- (void)setBPercent:(NSString *)bPercent
+{
+    [[self.rgbPersentForm cellAtIndex:2] setStringValue:bPercent];
+}
+
+
+#pragma mark  -
 - (void)updateColorWell
 {
-    [self.colorWell setColor:[NSColor colorWithRed:self.rPersentField.floatValue
-                                             green:self.gPersentField.floatValue
-                                              blue:self.bPersentField.floatValue
+    [self.colorWell setColor:[NSColor colorWithRed:self.rPercent.floatValue
+                                             green:self.gPercent.floatValue
+                                              blue:self.bPercent.floatValue
                                              alpha:1.0]];
     
-    NSString *codeStr = [NSString stringWithFormat:@"[UIColor colorWithRed:%g green:%g blue:%g alpha:1.0]",self.rPersentField.floatValue,self.gPersentField.floatValue,self.bPersentField.floatValue];
+    NSString *codeStr = [NSString stringWithFormat:@"[UIColor colorWithRed:%g green:%g blue:%g alpha:1.0]",self.rPercent.floatValue,self.gPercent.floatValue,self.bPercent.floatValue];
     self.codeLabel.stringValue = codeStr;
 }
 
@@ -43,27 +113,30 @@
         hexStr = [NSString stringWithFormat:@"0x%6@",self.hexField.stringValue];
     }
     NSArray *arr = [MasterViewController stringFromHexString:hexStr];
-//    
-    self.rField.stringValue = [NSString stringWithFormat:@"%@",arr[0]];
-    self.gField.stringValue = [NSString stringWithFormat:@"%@",arr[1]];
-    self.bField.stringValue = [NSString stringWithFormat:@"%@",arr[2]];
+//
     
-    self.rPersentField.stringValue = [NSString stringWithFormat:@"%g",self.rField.floatValue/255.0];
-    self.gPersentField.stringValue = [NSString stringWithFormat:@"%g",self.gField.floatValue/255.0];
-    self.bPersentField.stringValue = [NSString stringWithFormat:@"%g",self.bField.floatValue/255.0];
+    
+    
+    self.r = [NSString stringWithFormat:@"%@",arr[0]];
+    self.g = [NSString stringWithFormat:@"%@",arr[1]];
+    self.b = [NSString stringWithFormat:@"%@",arr[2]];
+    
+    self.rPercent = [NSString stringWithFormat:@"%g",self.r.floatValue/255.0];
+    self.gPercent = [NSString stringWithFormat:@"%g",self.g.floatValue/255.0];
+    self.bPercent = [NSString stringWithFormat:@"%g",self.b.floatValue/255.0];
     
     [self updateColorWell];
 }
 
 - (IBAction)persentToHex:(id)sender
 {
-    self.rField.stringValue = [NSString stringWithFormat:@"%.0f",self.rPersentField.floatValue*255];
-    self.gField.stringValue = [NSString stringWithFormat:@"%.0f",self.gPersentField.floatValue*255];
-    self.bField.stringValue = [NSString stringWithFormat:@"%.0f",self.bPersentField.floatValue*255];
+    self.r = [NSString stringWithFormat:@"%.0f",self.rPercent.floatValue*255];
+    self.g = [NSString stringWithFormat:@"%.0f",self.gPercent.floatValue*255];
+    self.b = [NSString stringWithFormat:@"%.0f",self.bPercent.floatValue*255];
     
-    NSString *r = [NSString stringWithUTF8String:decimal_to_hex(self.rField.intValue)];
-    NSString *g = [NSString stringWithUTF8String:decimal_to_hex(self.gField.intValue)];
-    NSString *b = [NSString stringWithUTF8String:decimal_to_hex(self.bField.intValue)];
+    NSString *r = [NSString stringWithUTF8String:decimal_to_hex(self.r.intValue)];
+    NSString *g = [NSString stringWithUTF8String:decimal_to_hex(self.g.intValue)];
+    NSString *b = [NSString stringWithUTF8String:decimal_to_hex(self.b.intValue)];
     
     NSString *result = [NSString stringWithFormat:@"%2@%2@%2@",
                         [r substringFromIndex:2],
@@ -76,9 +149,9 @@
 
 - (IBAction)toHex:(id)sender
 {
-    NSString *r = [NSString stringWithUTF8String:decimal_to_hex(self.rField.intValue)];
-    NSString *g = [NSString stringWithUTF8String:decimal_to_hex(self.gField.intValue)];
-    NSString *b = [NSString stringWithUTF8String:decimal_to_hex(self.bField.intValue)];
+    NSString *r = [NSString stringWithUTF8String:decimal_to_hex(self.r.intValue)];
+    NSString *g = [NSString stringWithUTF8String:decimal_to_hex(self.g.intValue)];
+    NSString *b = [NSString stringWithUTF8String:decimal_to_hex(self.b.intValue)];
     
     NSString *result = [NSString stringWithFormat:@"%2@%2@%2@",
                         [r substringFromIndex:2],
@@ -87,9 +160,9 @@
     self.hexField.stringValue = result;
     
     
-    self.rPersentField.stringValue = [NSString stringWithFormat:@"%f",self.rField.floatValue/255.0];
-    self.gPersentField.stringValue = [NSString stringWithFormat:@"%f",self.gField.floatValue/255.0];
-    self.bPersentField.stringValue = [NSString stringWithFormat:@"%f",self.bField.floatValue/255.0];
+    self.rPercent = [NSString stringWithFormat:@"%f",self.r.floatValue/255.0];
+    self.gPercent = [NSString stringWithFormat:@"%f",self.g.floatValue/255.0];
+    self.bPercent = [NSString stringWithFormat:@"%f",self.b.floatValue/255.0];
     
     [self updateColorWell];
 }
